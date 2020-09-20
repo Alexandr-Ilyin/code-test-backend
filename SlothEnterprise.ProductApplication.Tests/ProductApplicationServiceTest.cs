@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
 using Moq;
 using SlothEnterprise.External;
 using SlothEnterprise.External.V1;
 using SlothEnterprise.ProductApplication.Contracts;
 using SlothEnterprise.ProductApplication.Implementation;
-using SlothEnterprise.ProductApplication.Implementation.Handlers;
 using Xunit;
 
 namespace SlothEnterprise.ProductApplication.Tests
@@ -60,8 +60,13 @@ namespace SlothEnterprise.ProductApplication.Tests
 
             var buisnessLoanService = new Mock<IBusinessLoansService>();
             buisnessLoanService.Setup(svc => svc.SubmitApplicationFor(
-                It.IsAny<CompanyDataRequest>(), It.IsAny<LoansRequest>())).Returns(GetValidApplicationResult());
-            // TODO: Check load request
+                It.Is<CompanyDataRequest>(r=>
+                    r.CompanyFounded.Equals(GetCompanyData().Founded)&&
+                    r.CompanyName.Equals(GetCompanyData().Name) &&
+                    r.CompanyNumber.Equals(GetCompanyData().Number) &&
+                    r.DirectorName.Equals(GetCompanyData().DirectorName) 
+                    ), 
+                It.Is<LoansRequest>(r=>r.LoanAmount==2 && r.InterestRatePerAnnum==3))).Returns(GetValidApplicationResult());
 
             var applicationService = applicationServiceFactory.CreateProductApplicationService(
                 buisnessLoanService.Object,
@@ -80,7 +85,13 @@ namespace SlothEnterprise.ProductApplication.Tests
 
         private static SellerCompanyData GetCompanyData()
         {
-            return new SellerCompanyData();
+            return new SellerCompanyData()
+            {
+                Founded = new DateTime(1990, 1, 1),
+                DirectorName = "TestDirectorName",
+                Name = "TestName",
+                Number = 1000
+            };
         }
     }
 
