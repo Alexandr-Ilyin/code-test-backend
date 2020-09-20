@@ -2,28 +2,21 @@
 
 namespace SlothEnterprise.ProductApplication.Applications
 {
-
-    public interface ISellerApplication
+    public class SellerApplication
     {
-        IProduct Product { get;  }
-        ISellerCompanyData CompanyData { get;  }
-    }
-
-    public class SellerApplication : ISellerApplication
-    {
-        public SellerApplication(BusinessLoans businessLoans, ISellerCompanyData companyData)
+        public SellerApplication(BusinessLoans businessLoans, SellerCompanyData companyData)
         {
             BusinessLoans = businessLoans;
             CompanyData = companyData;
         }
 
-        public SellerApplication(ConfidentialInvoiceDiscount confidentialInvoiceDiscount, ISellerCompanyData companyData)
+        public SellerApplication(ConfidentialInvoiceDiscount confidentialInvoiceDiscount, SellerCompanyData companyData)
         {
             ConfidentialInvoiceDiscount = confidentialInvoiceDiscount;
             CompanyData = companyData;
         }
 
-        public SellerApplication(SelectiveInvoiceDiscount selectiveInvoiceDiscount, ISellerCompanyData companyData)
+        public SellerApplication(SelectiveInvoiceDiscount selectiveInvoiceDiscount, SellerCompanyData companyData)
         {
             SelectiveInvoiceDiscount = selectiveInvoiceDiscount;
             CompanyData = companyData;
@@ -34,9 +27,14 @@ namespace SlothEnterprise.ProductApplication.Applications
             get { return (IProduct)BusinessLoans ?? (IProduct)ConfidentialInvoiceDiscount ?? SelectiveInvoiceDiscount; }
         }
 
-        public BusinessLoans BusinessLoans { get;  }
+        public BusinessLoans BusinessLoans { get; }
         public ConfidentialInvoiceDiscount ConfidentialInvoiceDiscount { get; }
-        public SelectiveInvoiceDiscount  SelectiveInvoiceDiscount { get;  }
-        public ISellerCompanyData CompanyData { get;  }
+        public SelectiveInvoiceDiscount SelectiveInvoiceDiscount { get; }
+        public SellerCompanyData CompanyData { get; }
+
+        public override string ToString()
+        {
+            return $"{nameof(Product)}: {Product}, {nameof(CompanyData)}: {CompanyData}";
+        }
     }
 }
