@@ -1,9 +1,9 @@
 ﻿using System;
 using SlothEnterprise.External;
 using SlothEnterprise.External.V1;
-using SlothEnterprise.ProductApplication.Applications;
-using SlothEnterprise.ProductApplication.Internals;
-using SlothEnterprise.ProductApplication.Products;
+using SlothEnterprise.ProductApplication.Contracts;
+using SlothEnterprise.ProductApplication.Implementation;
+using SlothEnterprise.ProductApplication.Implementation.Handlers;
 
 namespace SlothEnterprise.ProductApplication
 {
@@ -21,7 +21,7 @@ namespace SlothEnterprise.ProductApplication
             foreach (var applicationHandler in handlers)
             {
                 if (applicationHandler.CanHandle(application))
-                    applicationHandler.Handle(application);
+                    return applicationHandler.Handle(application);
             }
             throw new ApplicationException($"Application is not supported:{application}");
         }

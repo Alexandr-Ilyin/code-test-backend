@@ -1,8 +1,8 @@
 using SlothEnterprise.External;
 using SlothEnterprise.External.V1;
-using SlothEnterprise.ProductApplication.Applications;
+using SlothEnterprise.ProductApplication.Contracts;
 
-namespace SlothEnterprise.ProductApplication.Internals
+namespace SlothEnterprise.ProductApplication.Implementation.Handlers
 {
     public class BuisnessLoansHandler : ISellerApplicationHandler
     {

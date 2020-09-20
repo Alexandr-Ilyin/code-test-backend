@@ -1,6 +1,4 @@
-﻿using SlothEnterprise.ProductApplication.Products;
-
-namespace SlothEnterprise.ProductApplication.Applications
+﻿namespace SlothEnterprise.ProductApplication.Contracts
 {
     public class SellerApplication
     {

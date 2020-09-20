@@ -1,4 +1,6 @@
-﻿namespace SlothEnterprise.ProductApplication.Products
+﻿using SlothEnterprise.ProductApplication.Implementation;
+
+namespace SlothEnterprise.ProductApplication.Contracts
 {
     public class ConfidentialInvoiceDiscount : IProduct
     {

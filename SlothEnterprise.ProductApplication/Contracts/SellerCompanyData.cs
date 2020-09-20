@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlothEnterprise.ProductApplication.Applications
+namespace SlothEnterprise.ProductApplication.Contracts
 {
     public class SellerCompanyData 
     {
