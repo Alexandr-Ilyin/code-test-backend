@@ -21,7 +21,7 @@ namespace SlothEnterprise.ProductApplication.Tests
             var confidentialInvoiceService = new Mock<IConfidentialInvoiceService>();
 
             confidentialInvoiceService.Setup(svc => svc.SubmitApplicationFor(It.IsAny<CompanyDataRequest>(), It.IsAny<decimal>(), 2, 4)).Returns(GetValidApplicationResult());
-            
+
             var applicationService = applicationServiceFactory.CreateProductApplicationService(
                 new Mock<IBusinessLoansService>().Object,
                 confidentialInvoiceService.Object,
@@ -32,9 +32,50 @@ namespace SlothEnterprise.ProductApplication.Tests
             Assert.Equal(1, applicationResult);
         }
 
+        [Fact]
+        public void CreateSelectiveInvoiceDiscountApplication__Handle__AssertIsRedirectedToBusinessLoansService()
+        {
+            var selectiveInvoiceDiscount = new SelectiveInvoiceDiscount() { InvoiceAmount = 1, AdvancePercentage = 2, Id = 3 };
+            var application = new SellerApplication(selectiveInvoiceDiscount, GetCompanyData());
+            var selectiveInvoiceService = new Mock<ISelectInvoiceService>();
+
+            selectiveInvoiceService.Setup(svc => svc.SubmitApplicationFor(
+                It.IsAny<string>(), 1,2)).Returns(1);
+
+            var applicationService = applicationServiceFactory.CreateProductApplicationService(
+                new Mock<IBusinessLoansService>().Object,
+                new Mock<IConfidentialInvoiceService>().Object,
+                selectiveInvoiceService.Object
+            );
+            var applicationResult = applicationService.SubmitApplicationFor(application);
+            selectiveInvoiceService.VerifyAll();
+            Assert.Equal(1, applicationResult);
+        }
+
+        [Fact]
+        public void CreateBuisnessLoanApplication__Handle__AssertIsRedirectedToBusinessLoansService()
+        {
+            var invoiceDiscount = new BusinessLoans() { Id = 1, LoanAmount = 2, InterestRatePerAnnum = 3 };
+            var application = new SellerApplication(invoiceDiscount, GetCompanyData());
+
+            var buisnessLoanService = new Mock<IBusinessLoansService>();
+            buisnessLoanService.Setup(svc => svc.SubmitApplicationFor(
+                It.IsAny<CompanyDataRequest>(), It.IsAny<LoansRequest>())).Returns(GetValidApplicationResult());
+            // TODO: Check load request
+
+            var applicationService = applicationServiceFactory.CreateProductApplicationService(
+                buisnessLoanService.Object,
+                new Mock<IConfidentialInvoiceService>().Object,
+                new Mock<ISelectInvoiceService>().Object
+            );
+            var applicationResult = applicationService.SubmitApplicationFor(application);
+            buisnessLoanService.VerifyAll();
+            Assert.Equal(1, applicationResult);
+        }
+
         private IApplicationResult GetValidApplicationResult()
         {
-            return new TestApplicationResult() { Success = true, ApplicationId = 1};
+            return new TestApplicationResult() { Success = true, ApplicationId = 1 };
         }
 
         private static SellerCompanyData GetCompanyData()
